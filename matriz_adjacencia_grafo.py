@@ -1,28 +1,18 @@
 import pandas as pd
 
 def csv_para_matriz_adjacencia(nome_arquivo, top_n=10):
-    """
-    Lê um grafo a partir de um CSV e converte para uma matriz de adjacência,
-    considerando o custo como a soma de distância, combustível e tempo.
 
-    Args:
-        nome_arquivo (str): Nome do arquivo CSV.
-        top_n (int): Número de menores custos a exibir.
-
-    Returns:
-        pd.DataFrame: Matriz de adjacência contendo os menores custos.
-    """
     # Lê o CSV
-    df = pd.read_csv(nome_arquivo, header=None, names=['origem', 'destino', 'distancia', 'combustivel', 'tempo'])
+    df = pd.read_csv(nome_arquivo, header=None, names=['origem', 'destino', 'distancia', 'combustivel', 'portagem'])
 
     # Converte colunas numéricas
-    df[['distancia', 'combustivel', 'tempo']] = df[['distancia', 'combustivel', 'tempo']].apply(pd.to_numeric, errors='coerce')
+    df[['distancia', 'combustivel', 'portagem']] = df[['distancia', 'combustivel', 'portagem']].apply(pd.to_numeric, errors='coerce')
 
     # Remove linhas inválidas
     df.dropna(inplace=True)
 
     # Calcula custo total como a soma de distância, combustível e tempo
-    df['custo'] = df['distancia'] + df['combustivel'] + df['tempo']
+    df['custo'] = df['distancia'] + df['combustivel'] + df['portagem']
 
     # Lista de nós únicos
     nos = sorted(set(df['origem']).union(set(df['destino'])))
